@@ -27,8 +27,8 @@ function gets() {
                           <td id="alamat">${el.alamat}</td>
                           <td id="telp">${el.telp}</td>
                           <td><button type="button" id="delete" class="btn btn-danger btn-dell" onclick="deleteItemm(${el.idpelanggan})">DEL</button></td>
-                          <td><button type="button" id="update" class="btn btn-warning btn-ubahh" onclick="updateItemm(${el.idpelanggan})">UBAH</button></td>
-                          <td><button type="button" id="tambah" class="btn btn-dark btn-tambahh" onclick="tambahItemm(${el.idpelanggan})">BUY</button></td>
+                          <td><button type="button" id="update" class="btn btn-success btn-ubahh" onclick="updateItemm(${el.idpelanggan})">Update</button></td>
+                          <td><button type="button" id="tambah" class="btn btn-primary btn-tambahh" onclick="tambahItemm(${el.idpelanggan})">Beli</button></td>
                       </tr>`;
     });
     tampill += `</table>`;
@@ -37,10 +37,12 @@ function gets() {
 }
 gets();
 
-function tambahItemm(id) {
+
+
+function tambahItemm(idpelanggan) {
   axios({
     method: "GET",
-    url: "http://localhost/phpaxios/selectwhere.php?id=" + id,
+    url: "http://localhost/phpaxios/selectwhere.php?id=" + idpelanggan,
   }).then(function (response) {
     let out = `<table class="table mt-3">
           <thead>
@@ -51,49 +53,17 @@ function tambahItemm(id) {
             <th scope="col">Telp</th>
           </tr>
         </thead></table>`;
-    out += `<tr>
-                          <td id="idpelanggan">${response.data.idpelanggan}</td>
-                          <td id="pelanggan">${response.data.pelanggan}</td>
-                          <td id="alamat">${response.data.alamat}</td>
-                          <td id="telp">${response.data.telp}</td>
-                      </tr>`;
+        out += `<tr>
+                            <td id="idpelanggan">${response.data.idpelanggan}</td>
+                            <td id="pelanggan">${response.data.pelanggan}</td>
+                            <td id="alamat">${response.data.alamat}</td>
+                            <td id="telp">${response.data.telp}</td>
+                        </tr>`;
     document.querySelector("#dummyy").innerHTML = out;
   });
 }
 
-function submittt() {
-  idorder = 1;
-  jumlah = 2;
-  idbarang = document.getElementById("idbarang").value;
-  harga = document.getElementById("harga").value;
-  barang = document.getElementById("barang").value;
-  idpelanggan = document.getElementById("idpelanggan").value;
-  pelanggan = document.getElementById("pelanggan").value;
-  alamat = document.getElementById("alamat").value;
-  telp = document.getElementById("telp").value;
 
-  let dataAdd = {
-    idorder: idorder,
-    idbarang: idbarang,
-    jumlah: jumlah,
-    harga: harga,
-    barang: barang,
-    idpelanggan: idpelanggan,
-    pelanggan: pelanggan,
-    alamat: alamat,
-    telp: telp,
-  };
-
-  axios
-    .post(
-      "http://localhost/phpaxios/addtocart.php",
-      JSON.stringify(dataAdd)
-    )
-    .then(function (response) {
-      alert("Data Berhasil Dimasukkan !");
-      console.log(dataAdd);
-    });
-}
 
 //DELETE DATA
 function deleteItemm(idp) {
@@ -103,11 +73,11 @@ function deleteItemm(idp) {
 
   axios({
     method: "post",
-    url: "http://localhost/tugas-6-axios-dummy/php/delete.php",
+    url: "http://localhost/phpaxios/delete.php",
     data: JSON.stringify(idpelanggan),
   }).then(function (response) {
     alert("Data Berhasil Dihapus!");
-    window.location.reload("http://127.0.0.1:5502/layout/");
+    // window.location.reload("http://127.0.0.1:5502/layout/");
   });
   gets();
 }
@@ -123,27 +93,29 @@ function addpItem() {
 
   axios
     .post(
-      "http://localhost/tugas-6-axios-dummy/php/insert.php",
+      "http://localhost/phpaxios/insert.php",
       JSON.stringify(data)
     )
     .then((response) => {
       alert("Data Berhasil Ditambahkan!");
-      window.location.reload("http://127.0.0.1:5502/layout/");
+      // window.location.reload("http://127.0.0.1:5502/layout/");
     });
   gets();
 }
 
-function updateItemm(id) {
+// updateItem
+
+function updateItemm(idpelanggan) {
   let data = {
-    idpelanggan: id,
+    idpelanggan: idpelanggan,
   };
   axios
     .post(
-      "http://localhost/tugas-5-dbsmk-dummyjson-ajax/php/selectupdate.php",
+      "http://localhost/phpaxios/selectupdate.php",
       JSON.stringify(data)
     )
     .then(function (response) {
-      document.getElementById("id").value = response.data.id;
+      document.getElementById("id").value = response.data.idpelanggan;
       document.getElementById("pelanggan").value = response.data.pelanggan;
       document.getElementById("alamat").value = response.data.alamat;
       document.getElementById("telp").value = response.data.telp;
@@ -159,14 +131,15 @@ function updatee() {
   };
   axios
     .post(
-      "http://localhost/tugas-5-dbsmk-dummyjson-ajax/php/update.php",
+      "http://localhost/phpaxios/update.php",
       JSON.stringify(dataPelanggan)
     )
     .then(function (response) {
       console.log(response.data);
       alert(response.data);
+      gets();
     });
-  gets();
+  
 }
 
 // ---------------------DATA DUMMY JSON-------------------------
@@ -196,8 +169,8 @@ function getd() {
                         <td id="harga">${el.price}</td>
                         <td>${el.stock}</td>
                         <td><button type="button" id="delete" class="btn btn-danger btn-del" onclick="deleteItem(${el.id})">DEL</button></td>
-                        <td><button type="button" id="update" class="btn btn-warning btn-ubah" onclick="ubahItem(${el.id})">UBAH</button></td>
-                        <td><button type="button" id="tambah" class="btn btn-dark btn-tambah" onclick="tambahItem(${el.id})">BUY</button></td>
+                        <td><button type="button" id="update" class="btn btn-success btn-ubah" onclick="ubahItem(${el.id})">Update</button></td>
+                        <td><button type="button" id="tambah" class="btn btn-primary btn-tambah" onclick="tambahItem(${el.id})">Beli</button></td>
                     </tr>`;
     });
     tampil += `</table>`;
@@ -256,6 +229,7 @@ function addItem() {
 }
 
 //UPDATE DATA
+
 function ubahItem(id) {
   axios.get(`https://dummyjson.com/products/${id}`).then(function (response) {
     document.getElementById("id").value = response.data.id;
@@ -278,5 +252,83 @@ function ubahItemo() {
     .then(function (response) {
       console.log(data);
       alert("Data Berhasil Di Update !");
+    });
+}
+
+// Keranjang
+var idbrg = "";
+var hrg = "";
+var brg = "";
+function tambahItem(idu) {
+  axios.get("https://dummyjson.com/products/" + idu).then(function (response) {
+    let out =
+      '<table class="table table-secondary table-striped-columns"><thead><tr><th>ID</th><th>Nama Barang</th><th>Harga</th></tr></thead><tbody>';
+    out += `<tr>
+      <td id="idbrg">${response.data.id}</td>
+      <td id="brg">${response.data.title}</td>
+      <td id="hrg">${response.data.price}</td>
+  </tr>`;
+    out += `<button type="button" class="btn btn-outline-success mt-4" onclick="checkout('${response.data.id}','${response.data.price}','${response.data.title}')">Checkout</button>`;
+    document.querySelector("#dummy").innerHTML = out;
+  });
+}
+
+// Dipesan Oleh
+var idplgn = "";
+var nama = "";
+var alamat = "";
+var telp = "";
+function tambahItemm(idpelanggan) {
+  axios
+    .get(
+      "http://localhost/phpaxios/selectwhere.php?id=" + idpelanggan
+    )
+    .then(function (response) {
+      let out = `<table class="table mt-3">
+    <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Pelanggan</th>
+      <th scope="col">Alamat</th>
+      <th scope="col">Telp</th>
+    </tr>
+  </thead></table>`;
+      out += `<tr>
+                    <td id="idpelanggan">${response.data.idpelanggan}</td>
+                    <td id="pelanggan">${response.data.pelanggan}</td>
+                    <td id="alamat">${response.data.alamat}</td>
+                    <td id="telp">${response.data.telp}</td>
+                </tr>`;
+      document.querySelector("#dummyy").innerHTML = out;
+      idplgn = response.data.idpelanggan;
+      nama = response.data.pelanggan;
+      alamat = response.data.alamat;
+      telp = response.data.telp;
+    });
+}
+
+// Checkout
+function checkout(idbrg, hrg, brg) {
+  let idorder = 4;
+  let jumlah = 2;
+  let dataAdd = {
+    idorder: idorder,
+    idbarang: idbrg,
+    jumlah: jumlah,
+    harga: hrg,
+    barang: brg,
+    idpelanggan: idplgn,
+    pelanggan: nama,
+    alamat: alamat,
+    telp: telp,
+  };
+  axios
+    .post(
+      "http://localhost/dbsmk/php/addtocart.php",
+      JSON.stringify(dataAdd)
+    )
+    .then(function (response) {
+      //  window.location.href = "http://192.168.1.101:5500/";
+      alert("Data Pemesanan Valid!");
     });
 }

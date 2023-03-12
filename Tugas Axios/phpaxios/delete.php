@@ -18,5 +18,3 @@ if (!empty($idpelanggan)) {
     echo "Data Belum Dipilih";
 }
 
-
-?>
